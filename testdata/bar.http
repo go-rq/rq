@@ -1,0 +1,13 @@
+### Get a Bar
+GET {{host}}/bar
+
+< {% assert(response.statusCode === 404, 'the response status code is 404')%}
+
+### Make a Bar
+POST {{host}}/bar
+Content-Type: application/json
+
+{
+    "name": "foo"
+}
+

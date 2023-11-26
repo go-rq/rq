@@ -1,0 +1,6 @@
+### Get Baz
+< {% assert(request.name === 'Get Baz', 'the name is found') %}
+
+GET {{host}}/v1/baz
+
+< baz.js
