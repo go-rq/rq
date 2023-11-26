@@ -1,0 +1,11 @@
+### Create a Foo
+POST {{host}}/v1/foo
+Content-Type: application/json
+
+{
+  "foo": "bar",
+  "baz": ["fizz", "buzz"]
+}
+
+
+< foo.js
