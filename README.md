@@ -144,7 +144,7 @@ Content-Type: application/json
 }
 
 < {% 
-    assertTrue("response code is 200", response.status === 200);
+    assertTrue(response.status === 200, 'response code is 200');
 %}
 ```
 
