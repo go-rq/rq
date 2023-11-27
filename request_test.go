@@ -208,7 +208,7 @@ func TestRequest_applyEnv(t *testing.T) {
 		}
 		expected := `GET http://localhost:3838/users/1234
 Authorization: Bearer abc123` + "\n"
-		if diff := cmp.Diff(expected, request.applyEnv(WithEnvironment(context.Background(), map[string]string{
+		if diff := cmp.Diff(expected, request.ApplyEnv(WithEnvironment(context.Background(), map[string]string{
 			"id":    "1234",
 			"token": "abc123",
 		})).String()); diff != "" {

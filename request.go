@@ -110,7 +110,7 @@ func resolvePath(dir, file string) string {
 	return path.Join(dir, file)
 }
 
-func (r Request) applyEnv(ctx context.Context) Request {
+func (r Request) ApplyEnv(ctx context.Context) Request {
 	env := getEnvironment(ctx)
 	r.Method = replaceVariables(r.Method, env)
 	r.URL = replaceVariables(r.URL, env)
@@ -138,7 +138,7 @@ func (r *Request) Do(ctx context.Context) (*Response, error) {
 		return nil, ErrSkipped
 	}
 	ctx = WithEnvironment(ctx, rt.environment)
-	req, err := r.applyEnv(ctx).toHttpRequest(ctx)
+	req, err := r.ApplyEnv(ctx).ToHttpRequest(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func (r *Request) Do(ctx context.Context) (*Response, error) {
 	return resp, nil
 }
 
-func (r Request) toHttpRequest(ctx context.Context) (*http.Request, error) {
+func (r Request) ToHttpRequest(ctx context.Context) (*http.Request, error) {
 	req, err := http.NewRequestWithContext(ctx, r.Method, r.URL, bytes.NewBufferString(r.Body))
 	if err != nil {
 		return nil, err
