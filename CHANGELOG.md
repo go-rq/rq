@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/go-rq/rq/compare/v0.2.0...v0.3.0) (2023-11-27)
+
+
+### Features
+
+* export Request funcs `ApplyEnv` and `ToHttpRequest` ([#10](https://github.com/go-rq/rq/issues/10)) ([5c5c5d9](https://github.com/go-rq/rq/commit/5c5c5d9afb512a3ede6a663b5dc86aaa99be041d))
+
 ## [0.2.0](https://github.com/go-rq/rq/compare/v0.1.0...v0.2.0) (2023-11-27)
 
 
