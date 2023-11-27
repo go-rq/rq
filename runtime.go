@@ -3,7 +3,9 @@ package rq
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"io"
+	"strings"
 
 	"github.com/dop251/goja"
 )
@@ -84,12 +86,20 @@ func (r *Runtime) setResponse(resp *Response) {
 		panic(err)
 	}
 	resp.Body = io.NopCloser(bytes.NewBufferString(string(b)))
-	r.vm.Set("response", map[string]any{
+	respData := map[string]any{
 		"body":       string(b),
 		"headers":    resp.Header,
 		"status":     resp.Status,
 		"statusCode": resp.StatusCode,
-	})
+	}
+	if strings.Contains(resp.Header.Get("Content-Type"), "application/json") {
+		var data any
+		if err := json.Unmarshal(b, &data); err != nil {
+			panic(err)
+		}
+		respData["json"] = data
+	}
+	r.vm.Set("response", respData)
 }
 
 // scripts are javascript scripts that are loaded into each runtime instance.
