@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.0](https://github.com/go-rq/rq/compare/v0.1.0...v0.2.0) (2023-11-27)
+
+
+### Features
+
+* add rudimentary log collection from script runtime ([#9](https://github.com/go-rq/rq/issues/9)) ([116610c](https://github.com/go-rq/rq/commit/116610cffaf35fcc9843a5767c797cebff26c685))
+* add support for skipping requests from the pre-request script ([#6](https://github.com/go-rq/rq/issues/6)) ([7df8dc2](https://github.com/go-rq/rq/commit/7df8dc28fe959efb7b0b6823085be40f3d25afd7))
+* make the parsed json response available in post-request scripts ([#8](https://github.com/go-rq/rq/issues/8)) ([c9b36ae](https://github.com/go-rq/rq/commit/c9b36aeaf4ad8f45a164901754b6ffb475b711d3))
+
 ## [0.1.0](https://github.com/go-rq/rq/compare/v0.0.0...v0.1.0) (2023-11-26)
 
 
