@@ -36,15 +36,15 @@ func Run(t *testing.T, ctx context.Context, reqs []rq.Request, options ...Option
 			if err != nil {
 				t.Error(err)
 			}
-			if len(resp.PreRequestAssertions) > 0 {
+			if len(request.PreRequestAssertions) > 0 {
 				t.Run("Pre-Request Assertions", func(t *testing.T) {
 					var failed bool
-					for _, assertion := range resp.PreRequestAssertions {
+					for _, assertion := range request.PreRequestAssertions {
 						if assertion.Success {
-							t.Log(fmt.Sprintf("passed: %s\n", assertion.Message))
+							t.Logf("passed: %s\n", assertion.Message)
 						} else {
 							failed = true
-							t.Error(fmt.Sprintf("failed: %s\n", assertion.Message))
+							t.Errorf("failed: %s\n", assertion.Message)
 						}
 					}
 					if failed {
@@ -57,10 +57,10 @@ func Run(t *testing.T, ctx context.Context, reqs []rq.Request, options ...Option
 					var failed bool
 					for _, assertion := range resp.PostRequestAssertions {
 						if assertion.Success {
-							t.Log(fmt.Sprintf("passed: %s\n", assertion.Message))
+							t.Logf("passed: %s\n", assertion.Message)
 						} else {
 							failed = true
-							t.Error(fmt.Sprintf("failed: %s\n", assertion.Message))
+							t.Errorf("failed: %s\n", assertion.Message)
 						}
 					}
 					if failed {

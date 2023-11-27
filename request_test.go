@@ -235,7 +235,7 @@ func TestRequest_Do(t *testing.T) {
 			"",
 			`{"id":1234,"name":"John Doe"}`,
 		}, "\r\n")
-		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"id":1234,"name":"John Doe"}`))
 		}))
@@ -271,7 +271,7 @@ func TestRequest_Do(t *testing.T) {
 			"",
 			`{"id":1234,"name":"John Doe"}`,
 		}, "\r\n")
-		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"id":1234,"name":"John Doe"}`))
 		}))
@@ -294,7 +294,7 @@ assert(request !== undefined, 'request is defined')`, srv.URL)
 				Message: "request is defined",
 				Success: true,
 			},
-		}, resp.PreRequestAssertions); diff != "" {
+		}, request.PreRequestAssertions); diff != "" {
 			t.Errorf("assertions mismatch (-want +got):\n%s", diff)
 		}
 		if diff := cmp.Diff([]Assertion{
@@ -317,7 +317,7 @@ assert(request !== undefined, 'request is defined')`, srv.URL)
 			PostRequestScript: `assert(response.statusCode === 200, 'The response statusCode is 200');
 setEnv('someVar', 'someValue');`,
 		}
-		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(`{"id":1234,"name":"John Doe"}`))
 		}))
@@ -337,7 +337,7 @@ assert(request !== undefined, 'request is defined')`, srv.URL)
 				Message: "request is defined",
 				Success: true,
 			},
-		}, resp.PreRequestAssertions); diff != "" {
+		}, request.PreRequestAssertions); diff != "" {
 			t.Errorf("assertions mismatch (-want +got):\n%s", diff)
 		}
 		if diff := cmp.Diff([]Assertion{

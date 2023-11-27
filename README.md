@@ -70,6 +70,15 @@ from the scripting runtime and added to the Response object.
 assert(response.status === 200, 'response code is 200');
 ```
 
+##### log(message string)
+
+Appends a log message to `Request.Logs` property allowing the go
+runtime to access debug information from the scripting runtime.
+
+```javascript
+log(`the response status code was ${response.statusCode}`);
+```
+
 ##### `request` and `response` objects
 
 The `response` object is available in the post-request script and the `request`

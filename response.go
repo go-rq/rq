@@ -18,7 +18,6 @@ func newResponse(raw *http.Response) *Response {
 type Response struct {
 	*http.Response
 
-	PreRequestAssertions  []Assertion
 	PostRequestAssertions []Assertion
 }
 
