@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"io/ioutil"
 
 	"github.com/dop251/goja"
 )
@@ -12,6 +11,7 @@ import (
 type Runtime struct {
 	vm          *goja.Runtime
 	environment map[string]string
+	request     *Request
 }
 
 type Assertion struct {
@@ -36,6 +36,7 @@ func (r *Runtime) extractAssertions() []Assertion {
 }
 
 func (r *Runtime) reset() {
+	r.request = nil
 	r.vm.Set("environment", r.environment)
 	r.vm.Set("request", nil)
 	r.vm.Set("response", nil)
@@ -46,7 +47,8 @@ func (r *Runtime) resetAssertions() {
 	r.vm.Set("assertions", []Assertion{})
 }
 
-func (r *Runtime) setRequest(req Request) {
+func (r *Runtime) setRequest(req *Request) {
+	r.request = req
 	r.vm.Set("request", map[string]any{
 		"name":    req.Name,
 		"body":    req.Body,
@@ -54,6 +56,23 @@ func (r *Runtime) setRequest(req Request) {
 		"method":  req.Method,
 		"url":     req.URL,
 	})
+}
+
+func (r *Runtime) executeScript(script string) error {
+	_, err := r.vm.RunString(script)
+	req := r.extractRequest()
+	if value, ok := req["skip"].(bool); ok {
+		r.request.Skip = value
+	}
+	return err
+}
+
+func (r *Runtime) extractRequest() map[string]any {
+	value, err := r.vm.RunString("request")
+	if err != nil {
+		panic(err)
+	}
+	return value.Export().(map[string]any)
 }
 
 func (r *Runtime) setResponse(resp *Response) {
@@ -64,7 +83,7 @@ func (r *Runtime) setResponse(resp *Response) {
 	if err != nil {
 		panic(err)
 	}
-	resp.Body = ioutil.NopCloser(bytes.NewBufferString(string(b)))
+	resp.Body = io.NopCloser(bytes.NewBufferString(string(b)))
 	r.vm.Set("response", map[string]any{
 		"body":       string(b),
 		"headers":    resp.Header,

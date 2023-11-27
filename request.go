@@ -19,7 +19,10 @@ const (
 	RequestSeparator = "###"
 )
 
-var ErrInvalidRequest = errors.New("invalid request")
+var (
+	ErrInvalidRequest = errors.New("invalid request")
+	ErrSkipped        = errors.New("request skipped")
+)
 
 var (
 	headerRegexp        = regexp.MustCompile(`^([^:]+):\s*(.*)`)
@@ -56,6 +59,9 @@ type Request struct {
 
 	// The http Headers
 	Headers Headers
+
+	// Skip is a flag that indicates if the request should be skipped
+	Skip bool
 }
 
 type Headers []Header
@@ -107,17 +113,21 @@ func (r Request) applyEnv(ctx context.Context) Request {
 	return r
 }
 
-func (r Request) Do(ctx context.Context) (*Response, error) {
+func (r *Request) Do(ctx context.Context) (*Response, error) {
 	rt := getRuntime(ctx)
 	rt.setRequest(r)
+	defer rt.reset()
 	ctx = WithRuntime(ctx, rt)
 	var preRequestAssertions []Assertion
 	if r.PreRequestScript != "" {
-		if _, err := rt.vm.RunString(r.PreRequestScript); err != nil {
+		if err := rt.executeScript(r.PreRequestScript); err != nil {
 			return nil, err
 		}
 		preRequestAssertions = rt.extractAssertions()
 		rt.resetAssertions()
+	}
+	if r.Skip {
+		return nil, ErrSkipped
 	}
 	ctx = WithEnvironment(ctx, rt.environment)
 	req, err := r.applyEnv(ctx).toHttpRequest(ctx)
@@ -131,13 +141,12 @@ func (r Request) Do(ctx context.Context) (*Response, error) {
 	resp := newResponse(rawResp)
 	if r.PostRequestScript != "" {
 		rt.setResponse(resp)
-		if _, err := rt.vm.RunString(r.PostRequestScript); err != nil {
+		if err := rt.executeScript(r.PostRequestScript); err != nil {
 			return nil, err
 		}
 		resp.PostRequestAssertions = rt.extractAssertions()
 		resp.PreRequestAssertions = preRequestAssertions
 	}
-	rt.reset()
 	return resp, nil
 }
 
