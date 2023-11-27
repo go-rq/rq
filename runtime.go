@@ -14,6 +14,7 @@ type Runtime struct {
 	vm          *goja.Runtime
 	environment map[string]string
 	request     *Request
+	logs        []string
 }
 
 type Assertion struct {
@@ -22,19 +23,27 @@ type Assertion struct {
 }
 
 func (r *Runtime) extractEnvironment() {
-	vm, err := r.vm.RunString(`environment`)
+	value, err := r.vm.RunString(`environment`)
 	if err != nil {
 		panic(err)
 	}
-	r.environment = vm.Export().(map[string]string)
+	r.environment = value.Export().(map[string]string)
 }
 
 func (r *Runtime) extractAssertions() []Assertion {
-	vm, err := r.vm.RunString(`assertions`)
+	value, err := r.vm.RunString(`assertions`)
 	if err != nil {
 		panic(err)
 	}
-	return vm.Export().([]Assertion)
+	return value.Export().([]Assertion)
+}
+
+func (r *Runtime) extractLogs() []string {
+	value, err := r.vm.RunString(`logs`)
+	if err != nil {
+		panic(err)
+	}
+	return value.Export().([]string)
 }
 
 func (r *Runtime) reset() {
@@ -42,6 +51,8 @@ func (r *Runtime) reset() {
 	r.vm.Set("environment", r.environment)
 	r.vm.Set("request", nil)
 	r.vm.Set("response", nil)
+	r.logs = []string{}
+	r.vm.Set("logs", r.logs)
 	r.resetAssertions()
 }
 
@@ -113,8 +124,12 @@ var scripts = []string{
 }`,
 
 	`function getEnv(key) {
-return environment[key]
-  }`,
+  return environment[key]
+}`,
+	`function log(entry) {
+  logs.push(entry)
+}
+`,
 }
 
 type runtimeContextKey struct{}
