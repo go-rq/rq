@@ -139,19 +139,17 @@ func (r *roundtripper) RoundTrip(request *http.Request) (*http.Response, error) 
 	// log out the response
 	builder.WriteString(fmt.Sprintf("----- Response (duration: %s)\n", time.Since(start)))
 	defer resp.Body.Close()
-	if resp.ContentLength > 0 {
-		b, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return nil, err
-		}
-		// reset the response body to be read, then set it again to a new
-		// reader afterwards so it's available by callers
-                resp.Body = io.NopCloser(bytes.NewBuffer(b))
-		buf := bytes.NewBuffer(nil)
-		resp.Write(buf)
-		builder.WriteString(buf.String())
-		resp.Body = io.NopCloser(bytes.NewBuffer(b))
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
 	}
+	// reset the response body to be read, then set it again to a new
+	// reader afterwards so it's available by callers
+	resp.Body = io.NopCloser(bytes.NewBuffer(b))
+	buf := bytes.NewBuffer(nil)
+	resp.Write(buf)
+	builder.WriteString(buf.String())
+	resp.Body = io.NopCloser(bytes.NewBuffer(b))
 	r.t.Log(builder.String())
 	return resp, err
 }
