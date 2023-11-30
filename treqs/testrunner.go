@@ -144,7 +144,9 @@ func (r *roundtripper) RoundTrip(request *http.Request) (*http.Response, error) 
 		if err != nil {
 			return nil, err
 		}
-
+		// reset the response body to be read, then set it again to a new
+		// reader afterwards so it's available by callers
+                resp.Body = io.NopCloser(bytes.NewBuffer(b))
 		buf := bytes.NewBuffer(nil)
 		resp.Write(buf)
 		builder.WriteString(buf.String())
