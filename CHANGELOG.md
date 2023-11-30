@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/go-rq/rq/compare/v0.3.0...v0.3.1) (2023-11-30)
+
+
+### Bug Fixes
+
+* always capture the response body in treqs verbose mode ([#17](https://github.com/go-rq/rq/issues/17)) ([2737e0a](https://github.com/go-rq/rq/commit/2737e0a5c57406ef9f46eb5d4ca6ccac20a508b8))
+* where response bodies are now visible in treqs verbose mode ([#15](https://github.com/go-rq/rq/issues/15)) ([37dd05d](https://github.com/go-rq/rq/commit/37dd05d6e7788b06c23ae86e6494e52f3928ab47))
+
 ## [0.3.0](https://github.com/go-rq/rq/compare/v0.2.0...v0.3.0) (2023-11-27)
 
 
