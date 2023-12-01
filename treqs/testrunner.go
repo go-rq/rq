@@ -32,7 +32,7 @@ func Run(t *testing.T, ctx context.Context, reqs []rq.Request, options ...Option
 			if settings.Verbose {
 				ctx = rq.WithRequestRunner(ctx, httpClient(t))
 			}
-			resp, err := request.Do(ctx)
+			resp, err := request.Do(rq.WithLogger(ctx, t))
 			if err != nil {
 				t.Error(err)
 			}

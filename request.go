@@ -127,12 +127,24 @@ func (r *Request) Do(ctx context.Context) (*Response, error) {
 		r.Logs = append(r.Logs, rt.extractLogs()...)
 	}()
 	ctx = WithRuntime(ctx, rt)
+	logger := getLogger(ctx)
 	if r.PreRequestScript != "" {
 		if err := rt.executeScript(r.PreRequestScript); err != nil {
 			return nil, err
 		}
 		r.PreRequestAssertions = rt.extractAssertions()
 		rt.resetAssertions()
+		if logger != nil {
+			for _, log := range rt.extractLogs() {
+				logger.Log(log)
+			}
+		}
+	}
+	if logger != nil {
+		for _, log := range rt.extractLogs() {
+			logger.Log(log)
+		}
+		rt.resetLogs()
 	}
 	if r.Skip {
 		return nil, ErrSkipped
@@ -146,6 +158,7 @@ func (r *Request) Do(ctx context.Context) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	resp := newResponse(rawResp)
 	if r.PostRequestScript != "" {
 		rt.setResponse(resp)
@@ -153,6 +166,12 @@ func (r *Request) Do(ctx context.Context) (*Response, error) {
 			return nil, err
 		}
 		resp.PostRequestAssertions = rt.extractAssertions()
+		if logger != nil {
+			for _, log := range rt.extractLogs() {
+				logger.Log(log)
+			}
+		}
+
 	}
 	return resp, nil
 }
