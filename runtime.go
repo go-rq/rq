@@ -14,7 +14,6 @@ type Runtime struct {
 	vm          *goja.Runtime
 	environment map[string]string
 	request     *Request
-	logs        []string
 }
 
 type Assertion struct {
@@ -51,13 +50,16 @@ func (r *Runtime) reset() {
 	r.vm.Set("environment", r.environment)
 	r.vm.Set("request", nil)
 	r.vm.Set("response", nil)
-	r.logs = []string{}
-	r.vm.Set("logs", r.logs)
+	r.resetLogs()
 	r.resetAssertions()
 }
 
 func (r *Runtime) resetAssertions() {
 	r.vm.Set("assertions", []Assertion{})
+}
+
+func (r *Runtime) resetLogs() {
+	r.vm.Set("logs", []string{})
 }
 
 func (r *Runtime) setRequest(req *Request) {
