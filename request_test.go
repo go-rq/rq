@@ -348,7 +348,7 @@ assert(request !== undefined, 'request is defined')`, srv.URL)
 		}, resp.PostRequestAssertions); diff != "" {
 			t.Errorf("assertions mismatch (-want +got):\n%s", diff)
 		}
-		env := getEnvironment(ctx)
+		env := GetEnvironment(ctx)
 		if diff := cmp.Diff(map[string]string{
 			"host":    srv.URL,
 			"someVar": "someValue",

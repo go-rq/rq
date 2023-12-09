@@ -147,7 +147,7 @@ func getRuntime(ctx context.Context) *Runtime {
 
 	rt := &Runtime{
 		vm:          goja.New(),
-		environment: getEnvironment(ctx),
+		environment: GetEnvironment(ctx),
 	}
 	for _, script := range scripts {
 		_, err := rt.vm.RunString(script)

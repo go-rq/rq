@@ -111,7 +111,7 @@ func resolvePath(dir, file string) string {
 }
 
 func (r Request) ApplyEnv(ctx context.Context) Request {
-	env := getEnvironment(ctx)
+	env := GetEnvironment(ctx)
 	r.Method = replaceVariables(r.Method, env)
 	r.URL = replaceVariables(r.URL, env)
 	r.Body = replaceVariables(r.Body, env)
