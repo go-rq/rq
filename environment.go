@@ -28,7 +28,7 @@ func ResetEnvironment(ctx context.Context) {
 	WithEnvironment(ctx, map[string]string{})
 }
 
-func getEnvironment(ctx context.Context) map[string]string {
+func GetEnvironment(ctx context.Context) map[string]string {
 	if env, ok := ctx.Value(environmentContextKey{}).(map[string]string); ok {
 		return env
 	}
