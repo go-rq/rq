@@ -2,6 +2,7 @@ package rq
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -13,6 +14,52 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 )
+
+func ExampleRequest() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/users", func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]string{
+			"userId": "1234",
+		})
+	})
+	srv := httptest.NewServer(mux)
+	defer srv.Close()
+	input := `### Get User
+
+  < {% 
+    if(!getEnv('host')) {
+      request.skip = true;
+    }
+  %}
+
+  POST http://{{host}}/users
+  Accept: application/json
+
+  {
+    "name": "Fred Flintstone"
+  }
+
+  < {%
+    assert(response.statusCode === 201, 'status code is 201 Created')
+    assert(response.json.userId != undefined, 'a user id is returned')
+  %}
+  `
+
+	reqs, err := ParseRequests(input)
+	if err != nil {
+		panic(err)
+	}
+
+	result, err := reqs[0].Do(WithEnvironment(context.Background(), map[string]string{
+		"host": srv.URL,
+	}))
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(result.String())
+}
 
 func TestRequest_String(t *testing.T) {
 	t.Run("A request is converted to a string", func(t *testing.T) {
