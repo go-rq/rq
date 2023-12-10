@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.0](https://github.com/go-rq/rq/compare/v0.3.1...v0.4.0) (2023-12-10)
+
+
+### Features
+
+* export GetEnvironment ([#20](https://github.com/go-rq/rq/issues/20)) ([65a20b1](https://github.com/go-rq/rq/commit/65a20b1f7018e7135bb8dcf64730c1b09833d0f4))
+* request.String() outputs script text ([#21](https://github.com/go-rq/rq/issues/21)) ([c1bb210](https://github.com/go-rq/rq/commit/c1bb21082ecc61f262d33ced3f043cef39f2c21d))
+
+
+### Bug Fixes
+
+* resolve bug where script logs were  not output it tests ([#18](https://github.com/go-rq/rq/issues/18)) ([4a3be6e](https://github.com/go-rq/rq/commit/4a3be6e7961c01e76c69bc46afe3c0ec735ed2e2))
+* string formatting of the request ([#22](https://github.com/go-rq/rq/issues/22)) ([75a0475](https://github.com/go-rq/rq/commit/75a047590e954880d90958700adcbb59ee76924a))
+
+
+### Documentation
+
+* add examples ([#23](https://github.com/go-rq/rq/issues/23)) ([2bf4275](https://github.com/go-rq/rq/commit/2bf427562fbe96dbf7ed344a3b09b24bd19c3496))
+
 ## [0.3.1](https://github.com/go-rq/rq/compare/v0.3.0...v0.3.1) (2023-11-30)
 
 
