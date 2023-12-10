@@ -89,7 +89,13 @@ func (r Request) String() string {
 	if r.Name != "" {
 		buffer.WriteString(fmt.Sprintf("%s %s\n", RequestSeparator, r.Name))
 	}
+	if r.PreRequestScript != "" {
+		buffer.WriteString(fmt.Sprintf("\n\n<{%% %s %%}\n\n", r.PreRequestScript))
+	}
 	buffer.WriteString(r.HttpText())
+	if r.PostRequestScript != "" {
+		buffer.WriteString(fmt.Sprintf("\n\n<{%% %s %%}\n\n", r.PostRequestScript))
+	}
 	return buffer.String()
 }
 
