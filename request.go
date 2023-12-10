@@ -105,7 +105,10 @@ func (r Request) HttpText() string {
 	for _, header := range r.Headers {
 		fmt.Fprintf(&buffer, "%s: %s\n", header.Key, header.Value)
 	}
-	buffer.WriteString(r.Body)
+	if r.Body != "" {
+		buffer.WriteString("\n")
+		buffer.WriteString(r.Body)
+	}
 	return buffer.String()
 }
 
