@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/go-rq/rq/compare/v0.4.0...v0.4.1) (2023-12-27)
+
+
+### Documentation
+
+* Fix the name of assert function from README. ([#25](https://github.com/go-rq/rq/issues/25)) ([2c78458](https://github.com/go-rq/rq/commit/2c784582af2e48ab36b0274e93a953f1aa53afe7))
+
 ## [0.4.0](https://github.com/go-rq/rq/compare/v0.3.1...v0.4.0) (2023-12-10)
 
 
